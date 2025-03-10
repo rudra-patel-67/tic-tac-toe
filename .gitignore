@@ -1,2 +1,3 @@
-.gitingore
-a.out
+/.vscode
+
+*.out

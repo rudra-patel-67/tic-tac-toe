@@ -315,10 +315,7 @@ void MultiplayerMenu(){
 
     win = checkWin();
     if(win!=null)
-        menu = WinScreen;
-
-    cout<<checkDraw()<<endl;
-    
+        menu = WinScreen;    
 
     const bool isDraw = checkDraw();
     if(isDraw)

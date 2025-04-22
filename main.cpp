@@ -6,7 +6,7 @@ using namespace std;
 
 // ------------------------------Initailization----------------------------------------
 
-enum display{MainMenu,Singleplayer,Multiplayer,WinScreen,Exit};
+enum display{MainMenu,Singleplayer,Multiplayer,WinScreen,TieScreen,Exit};
 enum plays{null,O,X};
 
 plays turn = O;
@@ -15,6 +15,7 @@ plays wonBy = null;
 int winWidth=600;
 int winHeight=600;
 
+Color bgColor;
 
 int heightSection = winHeight/5;
 int widthSection = winWidth/5;
@@ -126,21 +127,30 @@ plays checkWin(){
             break;
         }
     }
-    i=0;
-    temp2 = board[i][i];							//first diagonal
-    if(board[i+1][i+1]==temp2 && board[i+2][i+2]==temp2)
+    temp2 = board[0][0];							//first diagonal
+    if(board[1][1]==temp2 && board[2][2]==temp2)
     {
         return temp2;
     }
-    temp3 = board[2][2];
-    if(board[1][1]==temp2 && board[0][0]==temp2)
+    temp3 = board[2][0];
+    if(board[1][1]==temp3 && board[0][2]==temp3)
     {
         return temp3;
     }
 
     return null;
 }
-plays win;
+
+plays win=null;
+
+bool checkDraw(){
+    for(int i=0;i<3;i++)    
+        for(int j=0;j<3;j++)    
+            if(board[i][j]==null)
+                return false;
+    return true;
+}
+
 
 // --------------------------------DRAWING---------------------------------------------------
 
@@ -154,7 +164,15 @@ void drawX(Vector2 p)
 void drawO(Vector2 pos)
 {
     DrawCircle(pos.x+(widthSection/2),pos.y+(heightSection/2),heightSection/2.65,BLACK);
-    DrawCircle(pos.x+(widthSection/2),pos.y+(heightSection/2),heightSection/3,WHITE);
+    DrawCircle(pos.x+(widthSection/2),pos.y+(heightSection/2),heightSection/3,bgColor);
+}
+
+void drawHashBoard(){
+    for(int i=2; i<4;i++)
+    {
+        DrawLineEx({widthSection,heightSection*i},{widthSection*(4),heightSection*i},5,BLACK);
+        DrawLineEx({widthSection*i,heightSection},{widthSection*i,heightSection*(4)},5,BLACK); 
+    }
 }
 
 //-------------------------------------------------------------------------------------
@@ -166,7 +184,7 @@ class buttons{
         Vector2 size;
         float roundness;
         int segments;
-        Color bgColor;
+        Color btnBgColor;
         Color defaultBgColor;
         Vector4 button;
         string id;
@@ -178,7 +196,7 @@ class buttons{
         size=s;
         roundness=r;
         segments=seg;
-        bgColor=defaultBgColor=bgC;
+        btnBgColor=defaultBgColor=bgC;
         id = i;
     }
     
@@ -186,12 +204,12 @@ class buttons{
     {
         Vector2 mousePos = GetMousePosition();
         if((mousePos.x>button.x && mousePos.x<button.z  && mousePos.y>button.y && mousePos.y<button.w) && id == "exit")
-            bgColor=RED;
+            btnBgColor=RED;
         else if((mousePos.x>button.x && mousePos.x<button.z  && mousePos.y>button.y && mousePos.y<button.w))
-            bgColor=YELLOW;
+            btnBgColor=YELLOW;
         else
-            bgColor=defaultBgColor;
-        DrawRectangleRounded({pos.x-(size.x/2),pos.y-(size.y/2),size.x,size.y},roundness,segments,bgColor);
+            btnBgColor=defaultBgColor;
+        DrawRectangleRounded({pos.x-(size.x/2),pos.y-(size.y/2),size.x,size.y},roundness,segments,btnBgColor);
 
         button = {pos.x-(size.x/2),pos.y-(size.y/2),pos.x+(size.x/2),pos.y+(size.y/2)};
         // func();
@@ -212,7 +230,6 @@ class buttons{
 
 // #### Menus 
 
-Color bgColor = LIGHTGRAY;
 void winnerDisplay(plays win);
     
 
@@ -234,18 +251,22 @@ void mainMenu(){
     // printTest(titleLen);
     DrawText(title,((winWidth/2)-(titleLen/2)),winHeight/8,20,BLACK);
 
-    buttons btn1({(float)winWidth/2,200},{((float)winWidth/2),50},.5,3,GREEN,"Multliplayer");
+    buttons btn1({(float)winWidth/2,200},{((float)winWidth/2),50},.5,3,GREEN,"Singleplayer");
     
-    buttons btn2({(float)winWidth/2,300},{((float)winWidth/2),50},.5,3,GREEN,"Singleplayer");
+    buttons btn2({(float)winWidth/2,300},{((float)winWidth/2),50},.5,3,GREEN,"Multliplayer");
 
     buttons btn3({(float)winWidth/2,400},{((float)winWidth/2),50},.5,3,GREEN,"exit");
     
     bgColor = LIGHTGRAY;
 
-    int textlen = MeasureText("Multiplayer",20);    
+    const char singTitle[] = "Singleplayer (Coming Soon)";
+    const char multTitle[] = "Multiplayer (Pass & Play)";
+    int textlen = MeasureText(singTitle,20);    
     btn1.drawButtons();
-    DrawText("Multiplayer",(winWidth/2)-(textlen/2),190,20,BLACK);
+    DrawText(singTitle,(winWidth/2)-(textlen/2),190,20,BLACK);
+    textlen = MeasureText(multTitle,20);    
     btn2.drawButtons();            
+    DrawText(multTitle,(winWidth/2)-(textlen/2),290,20,BLACK);
     btn3.drawButtons();            
     DrawText("Exit",(winWidth/2)-(MeasureText("Exit",20)/2),390,20,BLACK);
     
@@ -253,27 +274,30 @@ void mainMenu(){
     // std::cout << (int)btn1.isPressed() << " " << (int)btn2.isPressed() << "\n";
     
     if(btn1.isPressed())
-        menu=Multiplayer;
-    if(btn2.isPressed())
         menu=Exit;
+    if(btn2.isPressed())
+        menu=Multiplayer;
     if(btn3.isPressed())
         _Exit(0);
 
     EndDrawing();            
 }
 
+void drawDrawScreen();
+
 void MultiplayerMenu(){
-    bgColor = WHITE;
+    
+    bgColor = (turn==O)? BLUE:RED;
 
     BeginDrawing();
     ClearBackground(bgColor);
 
+    const char* turnText = (turn==O)? "Player 1 plays" : "Player 2 plays";
+    int turnTextlen = MeasureText(turnText,30);
+    DrawText(turnText,(winWidth/2)-(turnTextlen/2),(heightSection/2)-15,30,BLACK);
+
     // NOTE : # for ttt
-    for(int i=2; i<4;i++)
-    {
-        DrawLineEx({widthSection,heightSection*i},{widthSection*(4),heightSection*i},5,BLACK);
-        DrawLineEx({widthSection*i,heightSection},{widthSection*i,heightSection*(4)},5,BLACK); 
-    }
+    drawHashBoard();
 
     keyInput();
 
@@ -286,12 +310,21 @@ void MultiplayerMenu(){
                 drawX({widthSection*j,heightSection*i});
         }
     }
+
     EndDrawing();
 
     win = checkWin();
     if(win!=null)
         menu = WinScreen;
-        // winnerDisplay(win);
+
+    cout<<checkDraw()<<endl;
+    
+
+    const bool isDraw = checkDraw();
+    if(isDraw)
+        menu = TieScreen;
+
+
 }
 
 void defaultMenu(){
@@ -299,22 +332,56 @@ void defaultMenu(){
     
     BeginDrawing();
     ClearBackground(bgColor);
-    char text[]= "Default Case";
-    int textlen = MeasureText(text,20);
-    DrawText(text, winWidth/2-(textlen/2), winHeight/2-10, 20, WHITE);
-    DrawText(TextFormat("%d",textlen), winWidth/2-(MeasureText(TextFormat("%d",textlen),20)/2), 330, 20, WHITE);
+    char text[]= "Coming Soon...";
+    char text1[]= "Press M to return to Main Menu";
+    int textlen = MeasureText(text,40);
+    int textlen1 = MeasureText(text1,20);
+    DrawText(text, winWidth/2-(textlen/2), winHeight/2-30, 40, WHITE);
+    DrawText(text1, winWidth/2-(textlen1/2), winHeight/2+30, 20, WHITE);
+    EndDrawing();
+}
+
+
+void drawDrawScreen(){
+    bgColor = LIGHTGRAY;
+    
+    BeginDrawing();
+    ClearBackground(bgColor);
+    char text[]= "It's a Tie";
+    char text1[]= "Press R to reset the board";
+    char text2[]= "Press M to go to Main Menu";
+    int textlen = MeasureText(text,heightSection/2);
+    int textlen1 = MeasureText(text1,20);
+    int textlen2 = MeasureText(text2,20);
+    DrawText(text, winWidth/2-(textlen/2), heightSection*1.85, heightSection/2, BLACK);
+    DrawText(text1, winWidth/2-(textlen1/2), winHeight/2+20, 20, BLACK);
+    DrawText(text2, winWidth/2-(textlen2/2), winHeight/2+45, 20, BLACK);
+    EndDrawing();
+}
+
+
+void howToPlayScreen(){
+    bgColor = LIGHTGRAY;
+    
+    BeginDrawing();
+    ClearBackground(bgColor);
+    char text[]= "Comingr Soon...";
+    char text1[]= "Press M to return to Main Menu";
+    int textlen = MeasureText(text,40);
+    int textlen1 = MeasureText(text1,20);
+    DrawText(text, winWidth/2-(textlen/2), winHeight/2-30, 40, WHITE);
+    DrawText(text1, winWidth/2-(textlen1/2), winHeight/2+30, 20, WHITE);
     EndDrawing();
 }
 
 void winnerDisplay(plays win){
-    bgColor = BLACK;
+    // bgColor = LIGHTGRAY;
     BeginDrawing();
     ClearBackground(bgColor);
-    string winner=(win==O)?"Player One":"Player Two";
-    const char* text= TextFormat("%s won",winner.c_str());
+    const char* text=(win==O)?"Player One Won":"Player Two Won";
     // cout<<text;
-    int textlen = MeasureText(text,20);
-    DrawText(text, winWidth/2-(textlen/2), winHeight/2-10, 20, WHITE);
+    int textlen = MeasureText(text,50);
+    DrawText(text, winWidth/2-(textlen/2), winHeight/2-10, 50, BLACK);
     EndDrawing();
 }
 
@@ -346,10 +413,13 @@ int main(){
 
         if(IsKeyPressed(KEY_M))
             menu=MainMenu;
-        if (IsKeyPressed(KEY_R)){
+        if(IsKeyPressed(KEY_R) && menu != Multiplayer){
             menu = Multiplayer;
+            turn = O;
             boardReset();
         }
+
+        // menu = TieScreen;
 
         switch (menu)
         {
@@ -358,14 +428,18 @@ int main(){
                 break;
 
             case Multiplayer:
+                // howToPlayScreen();
                 MultiplayerMenu();
                 break;
 
             case WinScreen:
                 winnerDisplay(win);
                 break;
-            
-                
+             
+            case TieScreen:
+                drawDrawScreen();
+                break;
+             
             default:
                 defaultMenu();
                 break;

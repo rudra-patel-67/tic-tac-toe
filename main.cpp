@@ -6,7 +6,7 @@ using namespace std;
 
 // ------------------------------Initailization----------------------------------------
 
-enum display{MainMenu,Singleplayer,Multiplayer,WinScreen,TieScreen,Exit};
+enum display{MainMenu,Singleplayer,Multiplayer,WinScreen,TieScreen,Help,Exit};
 enum plays{null,O,X};
 
 plays turn = O;
@@ -78,31 +78,31 @@ void keyInput(){
     int key = GetKeyPressed();
     // std::cout<<key<<"\n";
     
-    if (key == KEY_KP_1 && board[2][0]==null) {
+    if ((key == KEY_KP_1|| key == KEY_Z) && board[2][0]==null) {
         board[2][0] = (plays)turn;
         turnSwitch();
-    } else if (key == KEY_KP_2 && board[2][1]==null) {
+    } else if ((key == KEY_KP_2|| key == KEY_X) && board[2][1]==null) {
         board[2][1] = (plays)turn;
         turnSwitch();
-    } else if (key == KEY_KP_3 && board[2][2]==null) {
+    } else if ((key == KEY_KP_3|| key == KEY_C) && board[2][2]==null) {
         board[2][2] = (plays)turn;
         turnSwitch();
-    } else if (key == KEY_KP_4 && board[1][0]==null) {
+    } else if ((key == KEY_KP_4|| key == KEY_A) && board[1][0]==null) {
         board[1][0] = (plays)turn;
         turnSwitch();
-    } else if (key == KEY_KP_5 && board[1][1]==null) {
+    } else if ((key == KEY_KP_5|| key == KEY_S) && board[1][1]==null) {
         board[1][1] = (plays)turn;
         turnSwitch();
-    } else if (key == KEY_KP_6 && board[1][2]==null) {
+    } else if ((key == KEY_KP_6|| key == KEY_D) && board[1][2]==null) {
         board[1][2] = (plays)turn;
         turnSwitch();
-    } else if (key == KEY_KP_7 && board[0][0]==null) {
+    } else if ((key == KEY_KP_7|| key == KEY_Q) && board[0][0]==null) {
         board[0][0] = (plays)turn;
         turnSwitch();
-    } else if (key == KEY_KP_8 && board[0][1]==null) {
+    } else if ((key == KEY_KP_8|| key == KEY_W) && board[0][1]==null) {
         board[0][1] = (plays)turn; 
         turnSwitch();
-    } else if (key == KEY_KP_9 && board[0][2]==null) {
+    } else if ((key == KEY_KP_9|| key == KEY_E) && board[0][2]==null) {
         board[0][2] = (plays)turn;
         turnSwitch();
     } 
@@ -362,12 +362,16 @@ void howToPlayScreen(){
     
     BeginDrawing();
     ClearBackground(bgColor);
-    char text[]= "Comingr Soon...";
+    char text[]= "A few keybinds to remember :";
     char text1[]= "Press M to return to Main Menu";
-    int textlen = MeasureText(text,40);
+    char text2[]= "Press R to reset the board";
+    int textlen = MeasureText(text,20);
     int textlen1 = MeasureText(text1,20);
-    DrawText(text, winWidth/2-(textlen/2), winHeight/2-30, 40, WHITE);
-    DrawText(text1, winWidth/2-(textlen1/2), winHeight/2+30, 20, WHITE);
+    int textlen2 = MeasureText(text2,20);
+    DrawText(text, widthSection/2, heightSection*4+20, 20, BLACK);
+    DrawText(text1, widthSection/1.5, heightSection*4+50, 20, BLACK);
+    DrawText(text2, widthSection/1.5, heightSection*4+80, 20, BLACK);
+    drawHashBoard();
     EndDrawing();
 }
 
@@ -408,15 +412,19 @@ int main(){
         else if(IsKeyPressed(KEY_SPACE) && menu==Exit)
             menu=MainMenu;
 
-        if(IsKeyPressed(KEY_M))
+        if(IsKeyPressed(KEY_M) && menu !=Multiplayer)
             menu=MainMenu;
+        
+        if(IsKeyPressed(KEY_ENTER) && menu == Help)
+            menu=Multiplayer;
+        
+        if(IsKeyPressed(KEY_F1))
+            menu=Help;
         if(IsKeyPressed(KEY_R) && menu != Multiplayer){
             menu = Multiplayer;
             turn = O;
             boardReset();
         }
-
-        // menu = TieScreen;
 
         switch (menu)
         {
@@ -425,7 +433,6 @@ int main(){
                 break;
 
             case Multiplayer:
-                // howToPlayScreen();
                 MultiplayerMenu();
                 break;
 
@@ -436,7 +443,11 @@ int main(){
             case TieScreen:
                 drawDrawScreen();
                 break;
-             
+
+            case Help:
+                howToPlayScreen();
+                break;
+                
             default:
                 defaultMenu();
                 break;

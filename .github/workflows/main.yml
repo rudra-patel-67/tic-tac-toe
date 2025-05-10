@@ -18,7 +18,7 @@ jobs:
 
     - name: Compile the Game
       run: |
-        clang++ main.cpp -o ttt-mac \
+        clang++ main.cpp -std=c++11 -o ttt-mac \
           -I/opt/homebrew/include \
           -L/opt/homebrew/lib \
           -lraylib \

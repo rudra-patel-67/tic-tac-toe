@@ -1,0 +1,34 @@
+name: Build macOS Raylib Game
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:  # lets you trigger it manually
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+    - name: Clone your game repo
+      uses: actions/checkout@v3
+
+    - name: Install Raylib
+      run: brew install raylib
+
+    - name: Compile the Game
+      run: |
+        clang++ main.cpp -o ttt-mac \
+          -I/opt/homebrew/include \
+          -L/opt/homebrew/lib \
+          -lraylib \
+          -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+
+    - name: Archive the binary
+      run: zip ttt-mac.zip ttt-mac
+
+    - name: Upload built binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: macOS-Build
+        path: ttt-mac.zip

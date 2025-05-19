@@ -24,21 +24,21 @@
 			"com.tldraw.shape.note": 9,
 			"com.tldraw.shape.line": 5,
 			"com.tldraw.shape.frame": 1,
-			"com.tldraw.shape.arrow": 5,
+			"com.tldraw.shape.arrow": 6,
 			"com.tldraw.shape.highlight": 1,
 			"com.tldraw.shape.embed": 4,
 			"com.tldraw.shape.image": 5,
 			"com.tldraw.shape.video": 3,
-			"com.tldraw.binding.arrow": 0
+			"com.tldraw.binding.arrow": 1
 		}
 	},
 	"records": [
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": -1086.8724028840645,
-			"y": -584.7857005736303,
-			"lastActivityTimestamp": 1745342189047,
+			"x": -458.6201254207351,
+			"y": -579.9575914298684,
+			"lastActivityTimestamp": 1747286281699,
 			"meta": {}
 		},
 		{
@@ -403,9 +403,9 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 1840.3789902143822,
-			"y": 586.3506573058272,
-			"z": 0.32448980189191845,
+			"x": 1537.6201254207351,
+			"y": 856.9575914298684,
+			"z": 1,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -730,9 +730,11 @@
 			"typeName": "shape"
 		},
 		{
-			"editingShapeId": null,
+			"editingShapeId": "shape:d_HJh6yaZS9mJHnF8ehht",
 			"croppingShapeId": null,
-			"selectedShapeIds": [],
+			"selectedShapeIds": [
+				"shape:d_HJh6yaZS9mJHnF8ehht"
+			],
 			"hoveredShapeId": null,
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
@@ -2007,6 +2009,57 @@
 			"typeName": "shape"
 		},
 		{
+			"x": -1253.6201254207351,
+			"y": -703.1607164298684,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:d_HJh6yaZS9mJHnF8ehht",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "m",
+				"w": 795.546875,
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "TO-DO: After game over going to main menu (M) does not reset "
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "the board so the last result (win/draw) keeps on  "
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "aO5cM",
+			"typeName": "shape"
+		},
+		{
 			"x": -1567.519163596298,
 			"y": 333.4601365552745,
 			"rotation": 0,
@@ -2218,8 +2271,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 483.33331298828125,
-				"h": 560
+				"w": 1684,
+				"h": 697
 			},
 			"insets": [
 				false,
@@ -2234,9 +2287,9 @@
 			"isChatting": false,
 			"highlightedUserIds": [],
 			"isFocused": true,
-			"devicePixelRatio": 1.2000000476837158,
+			"devicePixelRatio": 1,
 			"isCoarsePointer": false,
-			"isHoveringCanvas": false,
+			"isHoveringCanvas": true,
 			"openMenus": [],
 			"isChangingStyle": false,
 			"isReadonly": false,

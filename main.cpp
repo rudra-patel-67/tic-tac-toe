@@ -69,7 +69,7 @@ void menuSwitch(){             // NOTE : ONLY FOR TESTING
     if(menu==MainMenu)
         menu=Exit;
     else if(menu==Exit)
-        menu=MainMenu;
+    menu=MainMenu;
 }
 
 void keyInput(){
@@ -109,33 +109,27 @@ void keyInput(){
 }
 
 plays checkWin(){
-    int i,ii;
-    i=ii=0;
-    plays temp,temp1,temp2,temp3;
-    for(i=0;i<3;i++)
-    {
-        temp = board[i][ii];							//Horizontal line check
-        if(board[i][ii+1]==temp && board[i][ii+2]==temp)
-        {
-            return temp;
-            break;
-        }
-        temp1 = board[ii][i];							//Vertical line check
-        if(board[ii+1][i]==temp1 && board[ii+2][i]==temp1)
-        {
-            return temp1;
-            break;
+        // Check rows
+    for(int i = 0; i < 3; i++) {
+        if(board[i][0] != null && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+            return board[i][0];
         }
     }
-    temp2 = board[0][0];							//first diagonal
-    if(board[1][1]==temp2 && board[2][2]==temp2)
-    {
-        return temp2;
+
+    // Check columns
+    for(int i = 0; i < 3; i++) {
+        if(board[0][i] != null && board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+            return board[0][i];
+        }
     }
-    temp3 = board[2][0];
-    if(board[1][1]==temp3 && board[0][2]==temp3)
-    {
-        return temp3;
+
+    // Check diagonals
+    if(board[0][0] != null && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+        return board[0][0];
+    }
+
+    if(board[0][2] != null && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+        return board[0][2];
     }
 
     return null;
@@ -380,9 +374,15 @@ void winnerDisplay(plays win){
     BeginDrawing();
     ClearBackground(bgColor);
     const char* text=(win==O)?"Player One Won":"Player Two Won";
-    // cout<<text;
+    char text1[]= "Press R to reset the board";
+    char text2[]= "Press M to go to Main Menu";
     int textlen = MeasureText(text,50);
-    DrawText(text, winWidth/2-(textlen/2), winHeight/2-10, 50, BLACK);
+    int textlen1 = MeasureText(text1,20);
+    int textlen2 = MeasureText(text2,20);
+    DrawText(text, winWidth/2-(textlen/2), heightSection*1.85, 50, BLACK);
+    // DrawText(text, winWidth/2-(textlen/2), winHeight/2-10, 50, BLACK);
+    DrawText(text1, winWidth/2-(textlen1/2), winHeight/2+20, 20, BLACK);
+    DrawText(text2, winWidth/2-(textlen2/2), winHeight/2+45, 20, BLACK);
     EndDrawing();
 }
 
@@ -412,8 +412,11 @@ int main(){
         else if(IsKeyPressed(KEY_SPACE) && menu==Exit)
             menu=MainMenu;
 
-        if(IsKeyPressed(KEY_M) && menu !=Multiplayer)
+        if(IsKeyPressed(KEY_M) && menu !=Multiplayer){
             menu=MainMenu;
+            turn = O;
+            boardReset();
+        }
         
         if(IsKeyPressed(KEY_ENTER) && menu == Help)
             menu=Multiplayer;

@@ -57,6 +57,35 @@ void keyInput(){
         board[0][2] = (plays)turn;
         turnSwitch();
     } 
+    
+    Vector2 mousePos = GetMousePosition();
+    Vector2 touchPos = GetTouchPosition(0);
+    bool isClick = IsMouseButtonReleased(MOUSE_BUTTON_LEFT);
+    bool isTouch = (GetTouchPointCount() > 0) && IsGestureDetected(GESTURE_TAP);
+    Rectangle cell;
+    Color cellHighlightColor = (turn==O)? SKYBLUE : (Color){197, 71, 80,255};
+    for(int i=1; i<=3; i++){
+        for (int j=1; j<=3; j++){
+
+            cell = {(j*widthSection)+5,(i*heightSection)+5,widthSection-10,heightSection-10};
+            buttons btn({cell.x+widthSection*0.5f,cell.y+widthSection*.5f},{cell.width,cell.height},.5,5,(Color){0,0,0,0},cellHighlightColor,"");
+            btn.drawTransparentButton();
+            if(btn.isPressed() && board[i-1][j-1]==NONE){
+                board[i-1][j-1] = (plays)turn;
+                turnSwitch();
+            }
+            // if((mousePos.x>cell.x && mousePos.y>cell.y && mousePos.x<(cell.x+cell.width) && mousePos.y<(cell.y+cell.height)) || (touchPos.x>cell.x && touchPos.y>cell.y && touchPos.x<(cell.x+cell.width) && touchPos.y<(cell.y+cell.height))){
+            //     cout<<touchPos.x<<"\t"<<touchPos.y<<endl;
+            //     DrawRectangleRounded(cell,.5,5,cellHighlightColor);
+            //     DrawRectangleRoundedLines(cell,.5,5,BLACK);
+            //     if ((isClick || isTouch)&& board[i-1][j-1]==NONE)
+            //     {
+            //         board[i-1][j-1] = (plays)turn;
+            //         turnSwitch();
+            //     } 
+            // }
+        }
+    }
 }
 
 plays checkWin(){
@@ -138,60 +167,6 @@ void drawHashBoard(){
     }
 }
 
-//-------------------------------------------------------------------------------------
-
-class buttons{
-    
-    private:
-        Vector2 pos;
-        Vector2 size;
-        Vector2 renderPos;
-        float roundness;
-        int segments;
-        Color btnBgColor;
-        Color defaultBgColor;
-        Color btnHoverBgColor;
-        Color btnBorderColor;
-        Vector4 button;
-        string id;
-
-    public:
-    
-    buttons(Vector2 p, Vector2 s,float r, int seg, Color bgC, Color hvrC, string i){
-        pos=p;
-        size=s;
-        roundness=r;
-        segments=seg;
-        btnBgColor=defaultBgColor=bgC;
-        btnHoverBgColor=hvrC;
-        btnBorderColor=BLACK;
-        id = i;
-        renderPos = renderAt(p,s);
-    }
-    
-    void drawButtons()
-    {
-        Vector2 mousePos = GetMousePosition();
-        if((mousePos.x>button.x && mousePos.x<button.z  && mousePos.y>button.y && mousePos.y<button.w))
-            btnBgColor=btnHoverBgColor;
-        else
-            btnBgColor=defaultBgColor;
-            DrawRectangleRounded({renderPos.x,renderPos.y,size.x,size.y},roundness,segments,btnBgColor);
-            DrawRectangleRoundedLinesEx({renderPos.x,renderPos.y,size.x,size.y},roundness,segments,2,btnBorderColor);
-        Vector2 textPos = renderAt(pos,{(float)MeasureText(id.c_str(),20.0f)});
-        DrawText(id.c_str(),textPos.x,textPos.y-10,20,BLACK);
-        button = {pos.x-(size.x/2),pos.y-(size.y/2),pos.x+(size.x/2),pos.y+(size.y/2)};
-    }
-    
-    bool isPressed(){
-        Vector2 mousePos = GetMousePosition();
-        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && (mousePos.x>button.x && mousePos.x<button.z  && mousePos.y>button.y && mousePos.y<button.w)){
-            return true;   
-        }
-        return false;
-    }
-};
-
 
 // **********************************************************************************************************
 
@@ -212,14 +187,14 @@ void mainMenu(){
     
     char title[]= "Tic-Tac-Toe";
     int titleLen = MeasureText(title,30);
-    DrawText(title,(horizontallyCentered(winWidth,titleLen)),winHeight/8,30,BLACK);
+    DrawText(title,(horizontallyCentered(winWidth,titleLen)),winHeight/4,30,BLACK);
 
     buttons singleplayerBtn({winWidth/2,200},{(winWidth/2),50},.5,3,SKYBLUE,BLUE,"Singleplayer");
     
     buttons multiplayerBtn({winWidth/2,300},{(winWidth/2),50},.5,3,SKYBLUE,BLUE,"Multiplayer");
-
-    buttons exitBtn({winWidth/2,400},{(winWidth/2),50},.5,3,SKYBLUE,RED,"Exit");
     
+    buttons exitBtn({winWidth/2,400},{(winWidth/2),50},.5,3,SKYBLUE,RED,"Exit");
+
     buttons helpBtn({widthSection/3,heightSection/3},{50,50},.5,3,{0,0,0,0},BLUE,"?");
     
 
@@ -228,12 +203,12 @@ void mainMenu(){
     const char singTitle[] = "Singleplayer (Coming Soon)";
     const char multTitle[] = "Multiplayer (Pass & Play)";
     int textlen = MeasureText(singTitle,20);    
-    singleplayerBtn.drawButtons();
+    singleplayerBtn.drawButton();
     textlen = MeasureText(multTitle,20);    
-    multiplayerBtn.drawButtons();            
-    exitBtn.drawButtons();            
+    multiplayerBtn.drawButton();            
+    exitBtn.drawButton();            
     
-    helpBtn.drawButtons();
+    helpBtn.drawButton();
 
     if(singleplayerBtn.isPressed())
         menu=SinglePlayerModeSelection;
@@ -242,9 +217,9 @@ void mainMenu(){
     if(helpBtn.isPressed()){
         menu=Help;
         lastMenu=MainMenu;
-    }
     if(exitBtn.isPressed())
-        _Exit(0);
+        _Exit();
+    }
 
     EndDrawing();            
 }
@@ -258,9 +233,9 @@ void ModeSelectionMenu(){
     buttons Easy({winWidth/2,200},{(winWidth/2),50},.5,3,SKYBLUE,GREEN,"Easy");
     buttons Hard({winWidth/2,300},{(winWidth/2),50},.5,3,SKYBLUE,RED,"Hard");  
     buttons Back({winWidth/2,400},{(winWidth/2),50},.5,3,SKYBLUE,BLUE,"Back");  
-    Easy.drawButtons();
-    Hard.drawButtons();  
-    Back.drawButtons();
+    Easy.drawButton();
+    Hard.drawButton();  
+    Back.drawButton();
     if(Back.isPressed()){
         menu=MainMenu;
     }  
@@ -285,11 +260,11 @@ void MultiplayerScreen(){
     DrawText(turnText,(winWidth/2)-(turnTextlen/2),(heightSection/2)-15,30,BLACK);
 
     // NOTE : # for ttt
+    keyInput();
     drawHashBoard();
 
-    keyInput();
 
-    helpBtn.drawButtons();
+    helpBtn.drawButton();
 
     if(helpBtn.isPressed()){
         menu=Help;
@@ -330,13 +305,13 @@ void TieDisplay(){
     ClearBackground(bgColor);
     char text[]= "It's a Tie";
     int textlen = MeasureText(text,heightSection/2);
-    buttons Reset({winWidth*0.35,(winHeight*0.9)},{widthSection,50},.5,3,SKYBLUE,BLUE,"Reset");  
-    buttons Back({winWidth*0.65,(winHeight*0.9)},{widthSection,50},.5,3,SKYBLUE,BLUE,"Back");  
+    buttons Reset({winWidth*0.35f,(winHeight*0.9f)},{widthSection,50},.5,3,SKYBLUE,BLUE,"Reset");  
+    buttons Back({winWidth*0.65f,(winHeight*0.9f)},{widthSection,50},.5,3,SKYBLUE,BLUE,"Back");  
 
     DrawText(text, winWidth/2-(textlen/2), heightSection*0.3, heightSection/2, BLACK);
     drawHashBoard();    
-    Back.drawButtons();
-    Reset.drawButtons();
+    Back.drawButton();
+    Reset.drawButton();
     
     if(Reset.isPressed()){
         turn = O;
@@ -355,18 +330,18 @@ void TieDisplay(){
 void howToPlayScreen(){
     
     bgColor = LIGHTGRAY;
-    char text[]= "A few keybinds to remember :";
-    int textlen = MeasureText(text,20);
+    // char text[]= "A few keybinds to remember :";
+    // int textlen = MeasureText(text,20);
     buttons backBtn({widthSection/3,heightSection/3},{60,60},.5,3,{0,0,0,0},BLUE,"Back");
 
     BeginDrawing();
     ClearBackground(bgColor);
     
-    DrawText(text, widthSection*2, heightSection*4+20, 20, BLACK);
+    // DrawText(text, widthSection*2, heightSection*4+20, 20, BLACK);
     drawHashBoard();
-    DrawTexture(layoutTexture,widthSection+10,heightSection+10,WHITE);
+    // DrawTexture(layoutTexture,widthSection+10,heightSection+10,WHITE);
 
-    backBtn.drawButtons();
+    backBtn.drawButton();
 
     if(backBtn.isPressed() || IsKeyReleased(KEY_F1))
         menu=lastMenu;
@@ -379,15 +354,15 @@ void winnerDisplay(plays win){
     BeginDrawing();
     const char* text=(win==O)?"Player One Won":"Player Two Won";
     int textlen = MeasureText(text,50);
-    buttons Reset({winWidth*0.35,(winHeight*0.9)},{widthSection,50},.5,3,SKYBLUE,BLUE,"Reset");  
-    buttons Back({winWidth*0.65,(winHeight*0.9)},{widthSection,50},.5,3,SKYBLUE,BLUE,"Back");  
+    buttons Reset({winWidth*0.35f,(winHeight*0.9f)},{widthSection,50},.5,3,SKYBLUE,BLUE,"Reset");  
+    buttons Back({winWidth*0.65f,(winHeight*0.9f)},{widthSection,50},.5,3,SKYBLUE,BLUE,"Back");  
     
     ClearBackground(bgColor);
     DrawText(text, winWidth/2-(textlen/2), heightSection*.3, 50, BLACK);
     drawHashBoard();    
     DrawLineEx({winLine.startX,winLine.startY},{winLine.endX,winLine.endY},5,BLACK);
-    Back.drawButtons();
-    Reset.drawButtons();
+    Back.drawButton();
+    Reset.drawButton();
     if(Reset.isPressed()){
         turn = O;
         boardReset();
@@ -421,7 +396,7 @@ int main(){
 
 
 
-    menu = Help;  // Just to make Multiplayer menu easier to make 
+    menu = Multiplayer;  // Just to make Multiplayer menu easier to make 
 
     
     while(!WindowShouldClose())

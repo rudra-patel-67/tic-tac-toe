@@ -198,11 +198,11 @@ void mainMenu(){
     char title[]= "Tic-Tac-Toe";
     int titleLen = MeasureText(title,30);
     
-    static buttons singleplayerBtn({winWidth/2,250},{(winWidth/2),50},.5,3,SKYBLUE,BLUE,"Singleplayer");
+    static buttons singleplayerBtn({winWidth/2,200},{(winWidth/2),50},.5,3,SKYBLUE,BLUE,"Singleplayer");
     
-    static buttons multiplayerBtn({winWidth/2,350},{(winWidth/2),50},.5,3,SKYBLUE,BLUE,"Multiplayer");
+    static buttons multiplayerBtn({winWidth/2,300},{(winWidth/2),50},.5,3,SKYBLUE,BLUE,"Multiplayer");
     
-    // static buttons exitBtn({winWidth/2,400},{(winWidth/2),50},.5,3,SKYBLUE,RED,"Exit");
+    static buttons exitBtn({winWidth/2,400},{(winWidth/2),50},.5,3,SKYBLUE,RED,"Exit");
     
     static buttons helpBtn({widthSection/3,heightSection/3},{50,50},.5,3,{0,0,0,0},BLUE,"?");
     
@@ -211,11 +211,11 @@ void mainMenu(){
     BeginDrawing();
     ClearBackground(bgColor);
     
-    DrawText(title,(horizontallyCentered(winWidth,titleLen)),winHeight/4,30,BLACK);
+    DrawText(title,(horizontallyCentered(winWidth,titleLen)),winHeight/6,30,BLACK);
 
     singleplayerBtn.drawButton();
     multiplayerBtn.drawButton();            
-    // exitBtn.drawButton();            
+    exitBtn.drawButton();            
     
     helpBtn.drawButton();
 
@@ -229,8 +229,8 @@ void mainMenu(){
         menu=Help;
         lastMenu=MainMenu;
     }
-    // if(exitBtn.isPressed())
-    //     exit(0);
+    if(exitBtn.isPressed())
+        exit(0);
 
     EndDrawing();            
 }
@@ -242,6 +242,9 @@ void ModeSelectionMenu(){
     static buttons Easy({winWidth/2,200},{(winWidth/2),50},.5,3,SKYBLUE,GREEN,"Easy");
     static buttons Hard({winWidth/2,300},{(winWidth/2),50},.5,3,SKYBLUE,RED,"Hard");  
     static buttons Back({winWidth/2,400},{(winWidth/2),50},.6,7,SKYBLUE,LIGHTHIGHLIGHT,"Back");  
+    char title[]= "Select Mode";
+    int titleLen = MeasureText(title,30);
+    
     lastMenu = menu;
     
     if(Easy.isPressed()) {
@@ -257,9 +260,10 @@ void ModeSelectionMenu(){
     if(Back.isPressed()) {
         menu=MainMenu;
     }
-
+    
     BeginDrawing();
     ClearBackground(bgColor);
+    DrawText(title,(horizontallyCentered(winWidth,titleLen)),winHeight/6,30,BLACK);
     Easy.drawButton();
     Hard.drawButton();
     Back.drawButton();

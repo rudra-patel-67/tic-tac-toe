@@ -1,7 +1,7 @@
-/.vscode
-/multiplayer-lan
+./.vscode
+./multiplayer-lan
 
-linuxBuild.bash
+linuxBuildNRun.bash
 test.bash
 element.h
 draw.tldr

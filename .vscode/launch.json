@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Bash Script",
+      "type": "bashdb",
+      "request": "launch",
+      "program": "/home/rudra/repos/personal/cli-tic-tac-toe/build.bash",
+      "terminalKind": "integrated"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": false,
+      "cwd": "/home/rudra/repos/personal/cli-tic-tac-toe",
+      "program": "/home/rudra/repos/personal/cli-tic-tac-toe/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,21 +1,55 @@
-# Tic-Tac-Toe (GUI)
-## **A simple GUI-based Tic-Tac-Toe game built using C++ raylib library.**
 
-<br>
 
-#### *TO-DO:*
+# 🎮 Tic-Tac-Toe (C++ / Raylib)
 
-* *After game over going to main menu (M) does not resetthe board so the last result (win/draw) keeps on repeating*
+A simple, Tic-Tac-Toe game built with **C++** and **Raylib**.  
 
-<br>
+Supports **Windows** and **Linux**, featuring:
+- ✅ Singleplayer:  
+  - **Easy mode:** AI makes random moves
+  - **Hard mode:** AI plays the best possible moves
+- 👫 Multiplayer: Pass & play on the same device
 
 ---
 
-<br>
+## ✨ Features
+
+- Clean and minimalistic Raylib UI
+- Cross-platform: Windows & Linux builds
+- Two AI difficulties:
+  - *Easy*: fun and beatable
+  - *Hard*: uses the Minimax algorithm to play optimally
+- Local pass & play multiplayer mode
+- Lightweight and fast
+
+
+---
 
 # Installation
 
-Fedora :
+_Make sure you have Raylib and a C++ compiler installed._
+<br>
+## 🐧 Linux
+
 ```
-sudo dnf install raylib
+
+! Clone repo
+git clone https://github.com/rudra-patel-67/tic-tac-toe.git
+cd ./tic-tac-toe
+
+! Build script
+bash ./build-linux.bash
 ```
+
+## 🪟 Windows
+
+```
+
+:: Clone repo
+git clone https://github.com/rudra-patel-67/tic-tac-toe.git
+cd .\tic-tac-toe
+
+:: Build script
+.\win-build.bat
+```
+

@@ -27,7 +27,7 @@ Supports **Windows** and **Linux**, featuring:
 
 # Installation
 
-_Make sure you have Raylib and a C++ compiler installed._
+⚠️ _Make sure you have Raylib and a C++ compiler installed._
 <br>
 ## 🐧 Linux
 

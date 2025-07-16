@@ -43,6 +43,11 @@ bash ./build-linux.bash
 
 ## 🪟 Windows
 
+<div style="display: flex; gap: 16px;">
+
+<div style="flex: 1; border: 1px solid #ccc; border-radius: 8px; padding: 12px;">
+<b>Command Prompt :</b><br>
+
 ```
 
 :: Clone repo
@@ -52,4 +57,22 @@ cd .\tic-tac-toe
 :: Build script
 .\win-build.bat
 ```
+
+</div>
+
+<div style="flex: 1; border: 1px solid #ccc; border-radius: 8px; padding: 12px;">
+<b>PowerShell :</b><br>
+
+```
+
+# Clone repo
+git clone https://github.com/rudra-patel-67/tic-tac-toe.git
+cd .\tic-tac-toe
+
+# Build script
+.\win-build.bat
+```
+</div>
+
+</div>
 

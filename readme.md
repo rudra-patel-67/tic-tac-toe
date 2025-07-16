@@ -32,7 +32,6 @@ _Make sure you have Raylib and a C++ compiler installed._
 ## 🐧 Linux
 
 ```
-
 ! Clone repo
 git clone https://github.com/rudra-patel-67/tic-tac-toe.git
 cd ./tic-tac-toe
@@ -49,7 +48,6 @@ bash ./build-linux.bash
 <b>Command Prompt :</b><br>
 
 ```
-
 :: Clone repo
 git clone https://github.com/rudra-patel-67/tic-tac-toe.git
 cd .\tic-tac-toe
@@ -64,7 +62,6 @@ cd .\tic-tac-toe
 <b>PowerShell :</b><br>
 
 ```
-
 # Clone repo
 git clone https://github.com/rudra-patel-67/tic-tac-toe.git
 cd .\tic-tac-toe

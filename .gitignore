@@ -1,5 +1,5 @@
-./.vscode
-./multiplayer-lan
+.vscode
+multiplayer-lan
 
 linuxBuildNRun.bash
 test.bash

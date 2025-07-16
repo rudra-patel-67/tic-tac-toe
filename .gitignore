@@ -1,5 +1,6 @@
 .vscode
 multiplayer-lan
+.github
 
 linuxBuildNRun.bash
 test.bash
